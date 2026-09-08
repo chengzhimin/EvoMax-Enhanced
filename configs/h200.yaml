@@ -1,0 +1,16 @@
+sequence: data/raw/wildtype.fasta
+device: cuda
+dtype: bf16
+batch_tokens: 1024
+stage1_fraction: 0.015
+final_count: 20
+models:
+  esm2: /data/run01/scwb286/.cache/torch/hub/checkpoints/esm2_t36_3B_UR50D.pt
+  esmc: /data/run01/scwb286/esm2_deploy/weights/ESMC-6B
+  esmfold2: /data/run01/scwb286/esm2_deploy/weights/ESMFold2
+  esm_if: null
+enhancements:
+  use_esm_c: false
+  use_esm1v: false
+  use_proteinmpnn: false
+  use_evolvepro: false
