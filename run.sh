@@ -2,11 +2,12 @@
 # H200: sbatch --gpus=1 -p gpu_h200 ./run.sh
 source /etc/profile
 set -euo pipefail
-module load miniforge3/26.3.2-3
-conda activate fair-esm
 
 export PYTHONPATH="$PWD/src"
+PYTHON=/data/home/scwb286/.conda/envs/fair-esm/bin/python
 echo "JOB_ID=${SLURM_JOB_ID:-local}"
 echo "HOST=$(hostname)"
-python scripts/gpu_smoke.py
-python scripts/core_selfcheck.py
+"$PYTHON" -V
+"$PYTHON" -c 'import torch; print("TORCH", torch.__version__); print("CUDA", torch.cuda.is_available()); print("GPU", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "NONE")'
+"$PYTHON" scripts/gpu_smoke.py
+"$PYTHON" scripts/core_selfcheck.py
