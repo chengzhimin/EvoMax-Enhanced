@@ -38,6 +38,12 @@ structure-compatible sequences and is not treated as an affinity predictor.
 RF3/OpenDDE/tFold remain downstream structure/interface gates and must be
 invoked using the installed Foundry/OpenDDE revision on the cluster.
 
+The executable multi-channel orchestrator is
+`evomax_enhanced.core.enhanced.EnhancedEvoMaxPipeline`. It accepts either a
+private candidate library or enumerates single substitutions, runs ESM-2 on
+the full candidate set, then runs ESM-C and ESM-IF1 only on the shortlist.
+GPR is optional and is included only when real assay labels are supplied.
+
 The H200 model cache is referenced by configuration; weights and project data are not copied into this repository.
 
 ## Environment
