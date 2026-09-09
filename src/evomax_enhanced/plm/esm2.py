@@ -4,6 +4,7 @@ The score is log p(mutant | masked context) - log p(wild type | masked context).
 """
 
 from collections.abc import Sequence
+from argparse import Namespace
 import numpy as np
 
 from ..core.pipeline import Mutation
@@ -20,7 +21,8 @@ class ESM2MaskedScorer:
         self.device = torch.device(device)
         self.dtype = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": torch.float32}[dtype]
         self.batch_size = batch_size
-        self.model, self.alphabet = esm.pretrained.load_model_and_alphabet_local(model_path)
+        with torch.serialization.safe_globals([Namespace]):
+            self.model, self.alphabet = esm.pretrained.load_model_and_alphabet_local(model_path)
         self.model = self.model.to(self.device).eval()
         self.batch_converter = self.alphabet.get_batch_converter()
 

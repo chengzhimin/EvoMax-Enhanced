@@ -1,8 +1,4 @@
-set -euo pipefail
 #!/usr/bin/env bash
-source /etc/profile
 set -euo pipefail
-module load miniforge3/26.3.2-3
-conda activate py311
-python -m pytest -q
-python scripts/gpu_smoke.py
+cd "$(dirname "$0")/.."
+sbatch --gpus=1 -p "${PARTITION:-hp_a800}" --time=00:10:00 ./run.sh

@@ -11,3 +11,4 @@ echo "HOST=$(hostname)"
 "$PYTHON" -c 'import torch; print("TORCH", torch.__version__); print("CUDA", torch.cuda.is_available()); print("GPU", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "NONE")'
 "$PYTHON" scripts/gpu_smoke.py
 "$PYTHON" scripts/core_selfcheck.py
+"$PYTHON" scripts/model_smoke.py

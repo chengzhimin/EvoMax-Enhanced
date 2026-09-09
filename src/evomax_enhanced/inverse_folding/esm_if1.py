@@ -29,11 +29,22 @@ class ESMIF1Scorer:
         if sequence != self.structure_sequence:
             raise ValueError("structure sequence must match the WT sequence residue-for-residue")
         values = []
+        coord_mask = np.all(np.isfinite(self.coords), axis=(-1, -2))
+        if not coord_mask.any():
+            raise ValueError("No complete backbone coordinates")
+        converter = util.CoordBatchConverter(self.alphabet)
         with self.torch.inference_mode():
             for pos, wt, mutant in mutations:
-                if sequence[pos] != wt:
+                if not 0 <= pos < len(sequence) or sequence[pos] != wt:
                     raise ValueError(f"WT mismatch at zero-based position {pos}")
                 mutated = sequence[:pos] + mutant + sequence[pos + 1 :]
-                _, ll_with_coord = util.score_sequence(self.model, self.alphabet, self.coords, mutated)
-                values.append(ll_with_coord)
+                coords, confidence, _, tokens, padding = converter(
+                    [(self.coords, None, mutated)], device=self.device
+                )
+                logits, _ = self.model(coords, padding, confidence, tokens[:, :-1])
+                loss = self.torch.nn.functional.cross_entropy(
+                    logits.float(), tokens[:, 1:], reduction="none"
+                )[0]
+                mask = self.torch.as_tensor(coord_mask, device=self.device)
+                values.append(-loss[:len(sequence)][mask].mean().item())
         return np.asarray(values, dtype=float)

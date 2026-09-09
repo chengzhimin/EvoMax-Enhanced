@@ -1,5 +1,19 @@
 # EvoMax-Enhanced
 
+## Verification status (2026-09-09)
+
+This is an incomplete prototype, not yet a validated reproduction of EvoMax.
+Core smoke checks use synthetic score providers. GPR training, a complete CLI,
+ESM-C/EVOLVEpro integration, and paper-level ranking parity remain outstanding.
+The current ESM-2 adapter uses 3B masked log-odds; it is not the paper's 650M baseline.
+
+Deployment: `/data/home/scwb286/EvoMax-Enhanced`.
+`run.sh` now tests actual ESM-2 checkpoint loading and inference as well as CUDA.
+ESM-IF1 input tensors are moved to the model device, but model inference remains
+unverified: `torch_scatter` is missing and the uploaded checkpoint was still a
+`.filepart` on inspection. Do not rename an incomplete upload to bypass this.
+The existing `fair-esm_test` scripts use ESMFold v1, not ESM-IF1.
+
 This project keeps a literature-comparable EvoMax baseline separate from optional enhancements.
 
 Baseline flow:
