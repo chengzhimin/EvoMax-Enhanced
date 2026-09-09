@@ -10,7 +10,7 @@ final_count: 20
 models:
   esm2: /private/models/esm2_t36_3B_UR50D.pt
   esmc: /private/models/ESMC-6B
-  esm_if1: /private/models/esm_if1_20220410.pt
+  esm_if: /private/models/esm_if1_20220410.pt
   proteinmpnn_checkpoint: /private/models/solublempnn_v_48_020.pt
   rf3_checkpoint: /private/models/rf3.ckpt
   opendde_checkpoint: /private/models/opendde_abag.pt
