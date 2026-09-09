@@ -39,6 +39,14 @@ GPR is explicitly unavailable because the source libraries contain no
 experimental labels. See `reports/REDACTED_EvoMax_model_only_20260909.md` and
 the server outputs under `/data/run01/scwb286/EvoMax-Enhanced/results/`.
 
+This entry point ranks the supplied candidate library; it does not train a GPR
+model or regenerate a new `L × 19` library. To reproduce the validated run on
+the preferred A800 queue:
+
+```bash
+PARTITION=hp_a800 bash scripts/submit_pedv_evmax.sh
+```
+
 ## H200 smoke test
 
 From the project directory on H200:
