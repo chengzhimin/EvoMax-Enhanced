@@ -1,0 +1,24 @@
+# Generic enzyme engineering template. Replace only with private project paths.
+task: enzyme
+sequence: /private/project/wildtype.fasta
+structure: /private/project/wildtype.pdb
+device: cuda
+dtype: bf16
+batch_size: 64
+stage1_fraction: 0.015
+final_count: 20
+models:
+  esm2: /private/models/esm2_t36_3B_UR50D.pt
+  esmc: /private/models/ESMC-6B
+  esm_if1: /private/models/esm_if1_20220410.pt
+  proteinmpnn_checkpoint: /private/models/solublempnn_v_48_020.pt
+  rf3_checkpoint: /private/models/rf3.ckpt
+  opendde_checkpoint: /private/models/opendde_abag.pt
+channels:
+  stage1: [gpr, esm2]
+  stage2: [gpr, esm2, esmc, esm_if1]
+  structure_filters: [proteinmpnn, rf3, opendde]
+mutable_regions:
+  # Example only; replace with residue numbers justified by the enzyme assay.
+  - "private_region_definition"
+experimental_labels: /private/project/assay_labels.csv
