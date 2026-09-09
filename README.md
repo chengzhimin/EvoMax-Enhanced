@@ -4,7 +4,7 @@
 
 This repository provides a reproducible, no-label model-only EvoMax candidate
 workflow. It is not a claim of experimental binding performance or paper-level
-ranking parity: no REDACTED/REDACTED experimental labels were available for GPR training.
+ranking parity: no project-specific experimental labels are included for GPR training.
 The current ESM-2 adapter uses 3B masked log-odds; it is not the paper's 650M baseline.
 
 Deployment: `/data/home/scwb286/EvoMax-Enhanced`.
@@ -28,7 +28,7 @@ Baseline flow:
 
 ESM-C, ESM-1v, ProteinMPNN, and EVOLVEpro must be optional calibrated channels with separate ablations. ESMFold2 is a structure predictor and is not a drop-in replacement for ESM-IF.
 
-The H200 model cache is referenced by configuration; weights are not copied into this repository.
+The H200 model cache is referenced by configuration; weights and project data are not copied into this repository.
 
 ## Environment
 
@@ -36,24 +36,13 @@ The reproducible CPU/package specification is in `environment.yml`. On the
 cluster, the validated GPU runtime is the existing
 `/data/home/scwb286/.conda/envs/fair-esm` environment, which supplies
 CUDA-enabled PyTorch and fair-esm. Model checkpoints remain outside GitHub and
-are referenced by `configs/h200.yaml` and the REDACTED runner.
+are referenced by `configs/h200.yaml` and private project runners.
 
-## REDACTED WT validation
+## Project-specific data
 
-The validated A800 run used the existing REDACTED and REDACTED WT libraries (800 variants
-each), ESM-2 scoring on the full scFv, and ESM-IF1 scoring on the matching H/L
-structure chains. Combination variants use additive single-mutation scores.
-GPR is explicitly unavailable because the source libraries contain no
-experimental labels. See `reports/REDACTED_EvoMax_model_only_20260909.md` and
-the server outputs under `/data/run01/scwb286/EvoMax-Enhanced/results/`.
-
-This entry point ranks the supplied candidate library; it does not train a GPR
-model or regenerate a new `L × 19` library. To reproduce the validated run on
-the preferred A800 queue:
-
-```bash
-PARTITION=hp_a800 bash scripts/submit_pedv_evmax.sh
-```
+Project-specific antibody sequences, candidate libraries, structures, model
+outputs and mutation rankings are intentionally excluded from this public
+repository. Run the generic pipeline with private data mounted on the cluster.
 
 ## H200 smoke test
 
