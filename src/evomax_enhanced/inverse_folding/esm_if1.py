@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Sequence
+from argparse import Namespace
 import numpy as np
 
 from ..core.pipeline import Mutation
@@ -19,7 +20,8 @@ class ESMIF1Scorer:
             raise FileNotFoundError(f"ESM-IF1 checkpoint not found: {checkpoint}")
         self.torch = torch
         self.device = torch.device(device)
-        self.model, self.alphabet = esm.pretrained.load_model_and_alphabet_local(checkpoint)
+        with torch.serialization.safe_globals([Namespace]):
+            self.model, self.alphabet = esm.pretrained.load_model_and_alphabet_local(checkpoint)
         self.model = self.model.to(self.device).eval()
         self.coords, self.structure_sequence = util.load_coords(structure, chain)
 
