@@ -30,6 +30,14 @@ ESM-C, ESM-1v, ProteinMPNN, and EVOLVEpro must be optional calibrated channels w
 
 The H200 model cache is referenced by configuration; weights are not copied into this repository.
 
+## Environment
+
+The reproducible CPU/package specification is in `environment.yml`. On the
+cluster, the validated GPU runtime is the existing
+`/data/home/scwb286/.conda/envs/fair-esm` environment, which supplies
+CUDA-enabled PyTorch and fair-esm. Model checkpoints remain outside GitHub and
+are referenced by `configs/h200.yaml` and the REDACTED runner.
+
 ## REDACTED WT validation
 
 The validated A800 run used the existing REDACTED and REDACTED WT libraries (800 variants

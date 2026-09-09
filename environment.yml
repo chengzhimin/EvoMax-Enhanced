@@ -1,0 +1,15 @@
+name: evomax-enhanced
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy>=1.24
+  - pip
+  - pip:
+      - -e .
+
+# The production GPU runtime on the cluster is the pre-provisioned
+# /data/home/scwb286/.conda/envs/fair-esm environment. It supplies the
+# CUDA-enabled PyTorch and fair-esm stack; do not install model checkpoints
+# into this repository or into the conda environment.
