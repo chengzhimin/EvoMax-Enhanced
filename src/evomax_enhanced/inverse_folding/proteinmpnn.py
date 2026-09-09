@@ -22,6 +22,7 @@ class ProteinMPNNConfig:
     number_of_batches: int = 2
     temperature: float = 0.2
     write_structures: bool = True
+    designed_residues: tuple[str, ...] | None = None
 
 
 class ProteinMPNNRunner:
@@ -42,8 +43,11 @@ class ProteinMPNNRunner:
             "--batch_size", str(cfg.batch_size),
             "--write_fasta", "True",
             "--temperature", str(cfg.temperature),
-            "--designed_chains", cfg.designed_chains,
         ]
+        if cfg.designed_residues:
+            command.extend(["--designed_residues", ",".join(cfg.designed_residues)])
+        else:
+            command.extend(["--designed_chains", cfg.designed_chains])
         if cfg.write_structures:
             command.extend(["--write_structures", "True"])
         return command
