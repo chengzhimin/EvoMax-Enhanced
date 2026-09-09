@@ -6,6 +6,7 @@ logit difference and must be calibrated/ablated separately from ESM-2.
 
 from argparse import Namespace
 from collections.abc import Sequence
+from pathlib import Path
 
 import numpy as np
 
@@ -23,7 +24,24 @@ class ESMCMaskedScorer:
         self.device = torch.device(device)
         self.dtype = {"bf16": torch.bfloat16, "fp16": torch.float16, "fp32": torch.float32}[dtype]
         self.batch_size = batch_size
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
+        except ValueError as exc:
+            # Some cluster images have a transformers build older than the
+            # ESM-C tokenizer registration. The checkpoint ships tokenizer.json
+            # and can still be loaded through the generic fast-tokenizer class.
+            if "ESMCTokenizer" not in str(exc):
+                raise
+            from transformers import PreTrainedTokenizerFast
+
+            tokenizer_file = Path(model_path) / "tokenizer.json"
+            if not tokenizer_file.is_file():
+                raise FileNotFoundError(tokenizer_file) from exc
+            self.tokenizer = PreTrainedTokenizerFast(
+                tokenizer_file=str(tokenizer_file),
+                unk_token="<unk>", pad_token="<pad>", cls_token="<cls>",
+                eos_token="<eos>", mask_token="<mask>",
+            )
         if self.tokenizer.mask_token_id is None:
             raise ValueError("ESM-C tokenizer has no mask token")
         self.mask_id = int(self.tokenizer.mask_token_id)

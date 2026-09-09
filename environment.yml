@@ -7,7 +7,7 @@ dependencies:
   - numpy>=1.24
   - pip
   - pip:
-      - -e .
+      - -e .[esmc]
 
 # The production GPU runtime on the cluster is the pre-provisioned
 # /data/home/scwb286/.conda/envs/fair-esm environment. It supplies the

@@ -29,6 +29,9 @@ Baseline flow:
 ESM-C, ESM-1v, ProteinMPNN, and EVOLVEpro must be optional calibrated channels with separate ablations. ESMFold2 is a structure predictor and is not a drop-in replacement for ESM-IF.
 
 The optional ESM-C adapter is `evomax_enhanced.plm.esmc.ESMCMaskedScorer`.
+It was loaded successfully on A800 in job `157975` with the cluster's
+`esm2_v2` environment (`transformers` 4.57.6); the older `fair-esm`
+environment remains the validated ESM-2/ESM-IF1 runtime.
 Foundry ProteinMPNN is exposed through
 `evomax_enhanced.inverse_folding.ProteinMPNNRunner`; it generates or filters
 structure-compatible sequences and is not treated as an affinity predictor.
