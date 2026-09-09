@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Sequence
 from argparse import Namespace
+from contextlib import nullcontext
 import numpy as np
 
 from ..core.pipeline import Mutation
@@ -20,7 +21,9 @@ class ESMIF1Scorer:
             raise FileNotFoundError(f"ESM-IF1 checkpoint not found: {checkpoint}")
         self.torch = torch
         self.device = torch.device(device)
-        with torch.serialization.safe_globals([Namespace]):
+        safe_globals = getattr(torch.serialization, "safe_globals", None)
+        load_context = safe_globals([Namespace]) if safe_globals else nullcontext()
+        with load_context:
             self.model, self.alphabet = esm.pretrained.load_model_and_alphabet_local(checkpoint)
         self.model = self.model.to(self.device).eval()
         self.coords, self.structure_sequence = util.load_coords(structure, chain)
@@ -43,6 +46,12 @@ class ESMIF1Scorer:
                 coords, confidence, _, tokens, padding = converter(
                     [(self.coords, None, mutated)], device=self.device
                 )
+                # Older fair-esm converters can leave token/padding tensors on
+                # CPU even when coordinates are requested on CUDA.
+                coords = coords.to(self.device)
+                confidence = confidence.to(self.device)
+                tokens = tokens.to(self.device)
+                padding = padding.to(self.device)
                 logits, _ = self.model(coords, padding, confidence, tokens[:, :-1])
                 loss = self.torch.nn.functional.cross_entropy(
                     logits.float(), tokens[:, 1:], reduction="none"
