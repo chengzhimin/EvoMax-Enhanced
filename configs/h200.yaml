@@ -8,7 +8,7 @@ models:
   esm2: /data/run01/scwb286/.cache/torch/hub/checkpoints/esm2_t36_3B_UR50D.pt
   esmc: /data/run01/scwb286/esm2_deploy/weights/ESMC-6B
   esmfold2: /data/run01/scwb286/esm2_deploy/weights/ESMFold2
-  esm_if: null
+  esm_if: /data/run01/scwb286/esm2_deploy/weights/ESM-IF1/esm_if1_20220410.pt
 enhancements:
   use_esm_c: false
   use_esm1v: false

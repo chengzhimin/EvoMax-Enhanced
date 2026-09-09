@@ -9,9 +9,9 @@ The current ESM-2 adapter uses 3B masked log-odds; it is not the paper's 650M ba
 
 Deployment: `/data/home/scwb286/EvoMax-Enhanced`.
 `run.sh` now tests actual ESM-2 checkpoint loading and inference as well as CUDA.
-ESM-IF1 input tensors are moved to the model device, but model inference remains
-unverified: `torch_scatter` is missing and the uploaded checkpoint was still a
-`.filepart` on inspection. Do not rename an incomplete upload to bypass this.
+ESM-IF1 input tensors are moved to the model device. The uploaded checkpoint is
+configured at `/data/run01/scwb286/esm2_deploy/weights/ESM-IF1/esm_if1_20220410.pt`.
+Run `python scripts/if1_model_smoke.py` on a GPU node to verify loading.
 The existing `fair-esm_test` scripts use ESMFold v1, not ESM-IF1.
 
 This project keeps a literature-comparable EvoMax baseline separate from optional enhancements.
